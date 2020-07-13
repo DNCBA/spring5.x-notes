@@ -77,20 +77,27 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #initBeanDefinitionReader
 	 * @see #loadBeanDefinitions
 	 */
+	/**
+	 * ioc初始化
+	 */
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
 		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		//创建一个beandDefinitionReader。内部持有对应的Register
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
 		// Configure the bean definition reader with this context's
 		// resource loading environment.
+		//配置beanDefinitionReader的参数 环境信息和资源加载器
 		beanDefinitionReader.setEnvironment(this.getEnvironment());
 		beanDefinitionReader.setResourceLoader(this);
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,
 		// then proceed with actually loading the bean definitions.
+		//初始化beanDefinition,配置是否要检验
 		initBeanDefinitionReader(beanDefinitionReader);
+		//ioc初始化
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
@@ -118,13 +125,24 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #getResources
 	 * @see #getResourcePatternResolver
 	 */
+	/**
+	 * ioc初始化
+	 */
 	protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
+		//进行资源配置文件的加载
+		//classPathXmlApplicationContext有不同的创建方式
+		//配置文件有两种地方存储
+		//分别通过getConfigResources/getConfigLocations两种方式起来进行获取
 		Resource[] configResources = getConfigResources();
 		if (configResources != null) {
+			//对资源文件进行对应的解析,解析后进行注册
 			reader.loadBeanDefinitions(configResources);
 		}
+
+		//加载本地的资源配置 大部分常用的方式
 		String[] configLocations = getConfigLocations();
 		if (configLocations != null) {
+			//对资源文件进行对应的解析,解析后进行注册
 			reader.loadBeanDefinitions(configLocations);
 		}
 	}

@@ -529,13 +529,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return this.applicationListeners;
 	}
 
+	/**
+	 * 容器启动的核心方法
+	 * 内部进行了bean的所有操作包括
+	 * ioc/di/aop的所有
+	 */
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
 			// Prepare this context for refreshing.
+			//做容器初始化前的准备工作
+			//核心包括设置一些环境参数,标记一下标志位,更新对应的观察者
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			//获得新的beanFactory。要获得新的bean工厂就要做所有的初始化操作
+			//ioc:定位->加载->注册
+			//di:实例化->属性注入
+			//aop:生成代理->进行扩展
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
@@ -598,8 +609,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Prepare this context for refreshing, setting its startup date and
 	 * active flag as well as performing any initialization of property sources.
 	 */
+	/**
+	 * 容器初始化的预准备阶段
+	 */
 	protected void prepareRefresh() {
 		// Switch to active.
+		// 设置容器标志位.标记容器状态
 		this.startupDate = System.currentTimeMillis();
 		this.closed.set(false);
 		this.active.set(true);
@@ -614,6 +629,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		//初始化容器的部分数据
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
@@ -621,6 +637,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
+		//更新容器的观察者
 		if (this.earlyApplicationListeners == null) {
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
@@ -651,7 +668,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+		//刷新bean工厂,并把生成好的工厂赋值给一个内部属性org.springframework.context.support.AbstractRefreshableApplicationContext.beanFactory
 		refreshBeanFactory();
+		//返回获取的对象
 		return getBeanFactory();
 	}
 

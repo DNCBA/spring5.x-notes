@@ -117,16 +117,24 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * bean factory, shutting down the previous bean factory (if any) and
 	 * initializing a fresh bean factory for the next phase of the context's lifecycle.
 	 */
+	/**
+	 * 刷新容器的方法
+	 */
 	@Override
 	protected final void refreshBeanFactory() throws BeansException {
+		//如果已经存在容器则销毁关闭重新生成
 		if (hasBeanFactory()) {
 			destroyBeans();
 			closeBeanFactory();
 		}
 		try {
+			//生成bean工厂对象,spring中获取对应的方式不直接new,而是包装成一个方法
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
+			//设置id
 			beanFactory.setSerializationId(getId());
+			//设置个性化参数
 			customizeBeanFactory(beanFactory);
+			//开始真正做ioc初始化
 			loadBeanDefinitions(beanFactory);
 			this.beanFactory = beanFactory;
 		}
@@ -211,10 +219,15 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * @see DefaultListableBeanFactory#setAllowRawInjectionDespiteWrapping
 	 * @see DefaultListableBeanFactory#setAllowEagerClassLoading
 	 */
+	/**
+	 * 容器的个性化配置
+	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
+		//是否允许同名下相互覆盖
 		if (this.allowBeanDefinitionOverriding != null) {
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
+		//是否允许循环依赖
 		if (this.allowCircularReferences != null) {
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}

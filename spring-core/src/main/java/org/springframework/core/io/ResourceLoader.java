@@ -39,6 +39,11 @@ import org.springframework.util.ResourceUtils;
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
  */
+
+/**
+ * 资源加载的顶层接口
+ * 1.配置文件的加载都是被包装成了Resource来进行下一步处理
+ */
 public interface ResourceLoader {
 
 	/** Pseudo URL prefix for loading from the class path: "classpath:". */

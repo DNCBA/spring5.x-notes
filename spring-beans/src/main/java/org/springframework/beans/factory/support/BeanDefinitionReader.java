@@ -37,12 +37,23 @@ import org.springframework.lang.Nullable;
  * @since 1.1
  * @see org.springframework.core.io.Resource
  */
+
+/**
+ * 解析BeanDefinition的顶层接口
+ * 1.被ResourceLoader接口加载的Resource可以再被解析成为BeanDefinition对象
+ * 2.BeanDefinitionRegistry用来将BeanDefinition对象注册到ioc容器中
+ * 3.ResourceLoader用来加载配置文件
+ * 4.BeanNameGenerator名称生成器
+ */
 public interface BeanDefinitionReader {
 
 	/**
 	 * Return the bean factory to register the bean definitions with.
 	 * <p>The factory is exposed through the BeanDefinitionRegistry interface,
 	 * encapsulating the methods that are relevant for bean definition handling.
+	 */
+	/**
+	 * 用来获取BeanDefinition的注册器,可以将解析出来的BeanDefinition注册到ioc容器中
 	 */
 	BeanDefinitionRegistry getRegistry();
 
@@ -63,6 +74,9 @@ public interface BeanDefinitionReader {
 	 * @see #loadBeanDefinitions(String)
 	 * @see org.springframework.core.io.support.ResourcePatternResolver
 	 */
+	/**
+	 * 资源加载器,可以用来获取资源加载器
+	 */
 	@Nullable
 	ResourceLoader getResourceLoader();
 
@@ -78,6 +92,9 @@ public interface BeanDefinitionReader {
 	/**
 	 * Return the BeanNameGenerator to use for anonymous beans
 	 * (without explicit bean name specified).
+	 */
+	/**
+	 * 用来生成Bean的name
 	 */
 	BeanNameGenerator getBeanNameGenerator();
 

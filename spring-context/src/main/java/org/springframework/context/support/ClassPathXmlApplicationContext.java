@@ -49,6 +49,13 @@ import org.springframework.util.Assert;
  * @see #getResourceByPath
  * @see GenericApplicationContext
  */
+
+/**
+ * 独立的xml容器,支持从classPath下指定文件来加载
+ * 本身实现了ResourceLoader,BeanFactory接口
+ * 	1.ResourceLoader用来加载配置文件
+ * 	2.BeanFactory用来对外提供Bean工厂
+ */
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
 
 	@Nullable
@@ -134,13 +141,19 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @throws BeansException if context creation failed
 	 * @see #refresh()
 	 */
+	/**
+	 * 核心构造方法
+	 */
 	public ClassPathXmlApplicationContext(
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
 			throws BeansException {
-
+		//用来设置父容器
 		super(parent);
+		//用来设置配置文件,为下一步的数据加载准备数据
+		//数据保存在org.springframework.context.support.AbstractRefreshableConfigApplicationContext.configLocations的字符串数组中
 		setConfigLocations(configLocations);
 		if (refresh) {
+			//容器启动最核心的内容
 			refresh();
 		}
 	}

@@ -305,8 +305,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @return the number of bean definitions found
 	 * @throws BeanDefinitionStoreException in case of loading or parsing errors
 	 */
+	/**
+	 * 准备解析,对resource类型的文件进行了二次包装
+	 */
 	@Override
 	public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
+		//包装的对象提供了一些扩展的获取数据方式
 		return loadBeanDefinitions(new EncodedResource(resource));
 	}
 
@@ -317,12 +321,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @return the number of bean definitions found
 	 * @throws BeanDefinitionStoreException in case of loading or parsing errors
 	 */
+	/**
+	 * 解析beanDefinition对象,传入的是配置resource对象
+	 */
 	public int loadBeanDefinitions(EncodedResource encodedResource) throws BeanDefinitionStoreException {
 		Assert.notNull(encodedResource, "EncodedResource must not be null");
 		if (logger.isTraceEnabled()) {
 			logger.trace("Loading XML bean definitions from " + encodedResource);
 		}
-
+		//threadLocal中保存的当前准备加载的资源信息,应该是为了其他地方能获取到数据
 		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
 
 		if (!currentResources.add(encodedResource)) {
@@ -335,6 +342,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			if (encodedResource.getEncoding() != null) {
 				inputSource.setEncoding(encodedResource.getEncoding());
 			}
+			//对配置文件又进行了包装,入参是两个不同形式的配置资源文件
 			return doLoadBeanDefinitions(inputSource, encodedResource.getResource());
 		}
 		catch (IOException ex) {
@@ -383,11 +391,16 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see #doLoadDocument
 	 * @see #registerBeanDefinitions
 	 */
+	/**
+	 * 真正开始进行beanDefinition的解析
+	 */
 	protected int doLoadBeanDefinitions(InputSource inputSource, Resource resource)
 			throws BeanDefinitionStoreException {
 
 		try {
+			//对资源文件进行解析封装成Document对象
 			Document doc = doLoadDocument(inputSource, resource);
+			//根据Document对象进行解析后注册
 			int count = registerBeanDefinitions(doc, resource);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Loaded " + count + " bean definitions from " + resource);
@@ -427,6 +440,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @throws Exception when thrown from the DocumentLoader
 	 * @see #setDocumentLoader
 	 * @see DocumentLoader#loadDocument
+	 */
+	/**
+	 * 把两种resource类型的配置文件解析成document对象
 	 */
 	protected Document doLoadDocument(InputSource inputSource, Resource resource) throws Exception {
 		return this.documentLoader.loadDocument(inputSource, getEntityResolver(), this.errorHandler,
@@ -505,10 +521,17 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see #setDocumentReaderClass
 	 * @see BeanDefinitionDocumentReader#registerBeanDefinitions
 	 */
+	/**
+	 * 根据包装好的document对象解析生成beanDefinition对象并进行注册
+	 */
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
+		//生成用来解析document的beanDefinitionReader的对象
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
+		//计数用用来计算ioc前后数据变化量
 		int countBefore = getRegistry().getBeanDefinitionCount();
+		//解析成BeanDefinition和注册到ioc容器中,入参是包装好的配置document对象和另一种xmlReader的配置资源对象
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
+		//用来计算注册的beanDefinition对象个数
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}
 
@@ -524,6 +547,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 	/**
 	 * Create the {@link XmlReaderContext} to pass over to the document reader.
+	 */
+	/**
+	 * 对配置资源文件的又一次包装,同时打包的还有对应Reader,Listener,Extractor,Resolver等
 	 */
 	public XmlReaderContext createReaderContext(Resource resource) {
 		return new XmlReaderContext(resource, this.problemReporter, this.eventListener,

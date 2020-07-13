@@ -45,6 +45,15 @@ import org.springframework.core.AliasRegistry;
  * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
  * @see PropertiesBeanDefinitionReader
  */
+
+/**
+ * 用来将BeanDefinition注册到ioc容器中的顶层接口
+ * 提供了对容器中beanDefinition对象的
+ * 增 registerBenaDefinition
+ * 删 removeBeanDefinition
+ * 查 getBeanDefinition
+ * 等其他功能功能
+ */
 public interface BeanDefinitionRegistry extends AliasRegistry {
 
 	/**
