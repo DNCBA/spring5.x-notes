@@ -35,6 +35,10 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * @since 2.5
  * @see org.springframework.beans.factory.config.ConfigurableBeanFactory#getMergedBeanDefinition
  */
+
+/**
+ * 合并BeanDefinition估计是跟是否开启同名覆盖有关
+ */
 public interface MergedBeanDefinitionPostProcessor extends BeanPostProcessor {
 
 	/**
@@ -43,6 +47,9 @@ public interface MergedBeanDefinitionPostProcessor extends BeanPostProcessor {
 	 * @param beanType the actual type of the managed bean instance
 	 * @param beanName the name of the bean
 	 * @see AbstractAutowireCapableBeanFactory#applyMergedBeanDefinitionPostProcessors
+	 */
+	/**
+	 * beanDefinition的合并的信息
 	 */
 	void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName);
 
@@ -53,6 +60,9 @@ public interface MergedBeanDefinitionPostProcessor extends BeanPostProcessor {
 	 * @param beanName the name of the bean
 	 * @since 5.1
 	 * @see DefaultListableBeanFactory#resetBeanDefinition
+	 */
+	/**
+	 * 重置beanDefinition的回调
 	 */
 	default void resetBeanDefinition(String beanName) {
 	}

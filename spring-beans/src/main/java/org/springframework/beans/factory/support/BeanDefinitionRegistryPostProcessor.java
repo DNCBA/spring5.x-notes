@@ -30,6 +30,11 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
  * @since 3.0.1
  * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
  */
+
+/**
+ * BeanDefinitionRegistry的后置处理
+ * 可以对PostProcessor之前的对象进行操作
+ */
 public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor {
 
 	/**

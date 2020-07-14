@@ -27,6 +27,10 @@ import org.springframework.beans.BeansException;
  * @author Juergen Hoeller
  * @since 1.0.1
  */
+
+/**
+ * 销毁AwareBean的后置处理器
+ */
 public interface DestructionAwareBeanPostProcessor extends BeanPostProcessor {
 
 	/**
@@ -41,6 +45,9 @@ public interface DestructionAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see org.springframework.beans.factory.DisposableBean#destroy()
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#setDestroyMethodName(String)
 	 */
+	/**
+	 * 销毁之前的一些处理,可以拿到bean对象和beanName
+	 */
 	void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException;
 
 	/**
@@ -53,6 +60,9 @@ public interface DestructionAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @return {@code true} if {@link #postProcessBeforeDestruction} is supposed to
 	 * be called for this bean instance eventually, or {@code false} if not needed
 	 * @since 4.3
+	 */
+	/**
+	 * 一个判断,应该是决定这个Bean是不是必须要销毁
 	 */
 	default boolean requiresDestruction(Object bean) {
 		return true;

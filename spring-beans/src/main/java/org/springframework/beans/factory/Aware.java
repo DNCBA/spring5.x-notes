@@ -32,6 +32,12 @@ package org.springframework.beans.factory;
  * @author Juergen Hoeller
  * @since 3.1
  */
+
+/**
+ * 一个可以获取已经存在的数据的接口类
+ * 获取的对象就是接口前的对象
+ * 例如:BeanClassLoaderAware就是一个能获取BeanClassLoader的类
+ */
 public interface Aware {
 
 }

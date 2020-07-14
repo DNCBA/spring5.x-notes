@@ -44,6 +44,11 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#setCustomTargetSourceCreators
  * @see org.springframework.aop.framework.autoproxy.target.LazyInitTargetSourceCreator
  */
+
+/**
+ * 实例化的后置处理
+ * Instantiation => 实例化
+ */
 public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 
 	/**
@@ -70,6 +75,10 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getBeanClass()
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getFactoryMethodName()
 	 */
+	/**
+	 * 在实例化目标对象之前执行,可以自定义实例化逻辑,
+	 * 如果返回的不是null则中断后续spring创建bean的流程
+	 */
 	@Nullable
 	default Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
 		return null;
@@ -89,6 +98,10 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * instances being invoked on this bean instance.
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessBeforeInstantiation
+	 */
+	/**
+	 * 在实例化完毕字后执行的后处理,在初始化逻辑,装配逻辑执行之前
+	 * 返回false将组织其他的instantiationAwareBeanPostProcessAfterInstantiation的执行
 	 */
 	default boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
 		return true;
@@ -111,6 +124,9 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @since 5.1
 	 * @see #postProcessPropertyValues
+	 */
+	/**
+	 * 完成的是依赖注入的属性检查等
 	 */
 	@Nullable
 	default PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName)
@@ -138,6 +154,9 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see #postProcessProperties
 	 * @see org.springframework.beans.MutablePropertyValues
 	 * @deprecated as of 5.1, in favor of {@link #postProcessProperties(PropertyValues, Object, String)}
+	 */
+	/**
+	 * 完成其他定制的一些依赖注入和依赖检查等
 	 */
 	@Deprecated
 	@Nullable

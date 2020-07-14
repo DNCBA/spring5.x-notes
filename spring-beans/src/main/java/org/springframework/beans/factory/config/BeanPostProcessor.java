@@ -55,6 +55,12 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableBeanFactory#addBeanPostProcessor
  * @see BeanFactoryPostProcessor
  */
+
+/**
+ * 后置处理器
+ * bean对象显式的实例化前后调用的方法
+ * Initialization => 初始化
+ */
 public interface BeanPostProcessor {
 
 	/**
@@ -69,6 +75,10 @@ public interface BeanPostProcessor {
 	 * if {@code null}, no subsequent BeanPostProcessors will be invoked
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
+	 */
+	/**
+	 * 在实例化,依赖注入完毕,在调用显式的初始化之前完成一些定制的初始化任务
+	 * Initialization => 初始化
 	 */
 	@Nullable
 	default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -95,6 +105,9 @@ public interface BeanPostProcessor {
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
 	 * @see org.springframework.beans.factory.FactoryBean
+	 */
+	/**
+	 * 实例化,依赖注入,初始化完毕时执行
 	 */
 	@Nullable
 	default Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {

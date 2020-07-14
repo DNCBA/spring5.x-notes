@@ -33,6 +33,10 @@ package org.springframework.beans.factory;
  * @see BeanFactoryAware
  * @see InitializingBean
  */
+
+/**
+ * 一个获取bean名称的一个接口
+ */
 public interface BeanNameAware extends Aware {
 
 	/**

@@ -59,6 +59,11 @@ import org.springframework.beans.BeansException;
  * @see BeanPostProcessor
  * @see PropertyResourceConfigurer
  */
+
+/**
+ * beanFactory的后置处理
+ * 后置处理是指前边的工作都已经处理完成之后进行操作
+ */
 @FunctionalInterface
 public interface BeanFactoryPostProcessor {
 
