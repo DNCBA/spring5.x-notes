@@ -114,6 +114,10 @@ import org.springframework.lang.Nullable;
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
  */
+
+/**
+ * 最顶层的bean工厂,定义了对外提供数据信息的所有基本方法
+ */
 public interface BeanFactory {
 
 	/**
@@ -136,6 +140,10 @@ public interface BeanFactory {
 	 * @return an instance of the bean
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
 	 * @throws BeansException if the bean could not be obtained
+	 */
+	/**
+	 * 根据名称来获取bean对象,在ioc阶段所有的bean都被解析成了BeanDefinition并且以kv形式保存在对应的Map中
+	 * 并没有做实例化操作,因此只有在获取使用bean的时候才会进行对应的实例化操作
 	 */
 	Object getBean(String name) throws BeansException;
 

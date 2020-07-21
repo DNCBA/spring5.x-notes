@@ -50,6 +50,8 @@ public interface MergedBeanDefinitionPostProcessor extends BeanPostProcessor {
 	 */
 	/**
 	 * beanDefinition的合并的信息
+	 * 就是实例化之前获取beanDefinition的操作
+	 *
 	 */
 	void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName);
 

@@ -232,6 +232,10 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return getRootInstance().getClass();
 	}
 
+	/**
+	 * propertyName:属性名称
+	 * value:属性值
+	 */
 	@Override
 	public void setPropertyValue(String propertyName, @Nullable Object value) throws BeansException {
 		AbstractNestablePropertyAccessor nestedPa;
@@ -243,6 +247,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 					"Nested property in path '" + propertyName + "' does not exist", ex);
 		}
 		PropertyTokenHolder tokens = getPropertyNameTokens(getFinalPath(nestedPa, propertyName));
+		//设置属性
 		nestedPa.setPropertyValue(tokens, new PropertyValue(propertyName, value));
 	}
 
@@ -270,15 +275,23 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		}
 	}
 
+	/**
+	 * 设置属性信息
+	 */
 	protected void setPropertyValue(PropertyTokenHolder tokens, PropertyValue pv) throws BeansException {
 		if (tokens.keys != null) {
+			//设置容器类属性的value
 			processKeyedProperty(tokens, pv);
 		}
 		else {
+			//设置属性
 			processLocalProperty(tokens, pv);
 		}
 	}
 
+	/**
+	 * 注入list,array,map类的属性信息
+	 */
 	@SuppressWarnings("unchecked")
 	private void processKeyedProperty(PropertyTokenHolder tokens, PropertyValue pv) {
 		Object propValue = getPropertyHoldingValue(tokens);
@@ -308,6 +321,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 					setPropertyValue(tokens.actualName, newArray);
 					propValue = getPropertyValue(tokens.actualName);
 				}
+				//注入属性
 				Array.set(propValue, arrayIndex, convertedValue);
 			}
 			catch (IndexOutOfBoundsException ex) {
@@ -339,6 +353,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 								"': List does not support filling up gaps with null elements");
 					}
 				}
+				//注入属性
 				list.add(convertedValue);
 			}
 			else {
@@ -368,6 +383,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			// conversion ability for map values.
 			Object convertedMapValue = convertIfNecessary(tokens.canonicalName, oldValue, pv.getValue(),
 					mapValueType, ph.nested(tokens.keys.length));
+			//注入属性
 			map.put(convertedMapKey, convertedMapValue);
 		}
 
@@ -412,6 +428,9 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return propValue;
 	}
 
+	/**
+	 * 处理设置属性
+	 */
 	private void processLocalProperty(PropertyTokenHolder tokens, PropertyValue pv) {
 		PropertyHandler ph = getLocalPropertyHandler(tokens.actualName);
 		if (ph == null || !ph.isWritable()) {
@@ -455,6 +474,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 				}
 				pv.getOriginalPropertyValue().conversionNecessary = (valueToApply != originalValue);
 			}
+			//设置属性信息
 			ph.setValue(valueToApply);
 		}
 		catch (TypeMismatchException ex) {

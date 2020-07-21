@@ -61,9 +61,12 @@ public abstract class AbstractPropertyAccessor extends TypeConverterSupport impl
 		return this.autoGrowNestedPaths;
 	}
 
-
+	/**
+	 * 设置属性的方法
+	 */
 	@Override
 	public void setPropertyValue(PropertyValue pv) throws BeansException {
+		//设置属性
 		setPropertyValue(pv.getName(), pv.getValue());
 	}
 
@@ -74,6 +77,7 @@ public abstract class AbstractPropertyAccessor extends TypeConverterSupport impl
 
 	@Override
 	public void setPropertyValues(PropertyValues pvs) throws BeansException {
+		//设置属性
 		setPropertyValues(pvs, false, false);
 	}
 
@@ -82,6 +86,9 @@ public abstract class AbstractPropertyAccessor extends TypeConverterSupport impl
 		setPropertyValues(pvs, ignoreUnknown, false);
 	}
 
+	/**
+	 * 设置属性信息
+	 */
 	@Override
 	public void setPropertyValues(PropertyValues pvs, boolean ignoreUnknown, boolean ignoreInvalid)
 			throws BeansException {
@@ -90,10 +97,12 @@ public abstract class AbstractPropertyAccessor extends TypeConverterSupport impl
 		List<PropertyValue> propertyValues = (pvs instanceof MutablePropertyValues ?
 				((MutablePropertyValues) pvs).getPropertyValueList() : Arrays.asList(pvs.getPropertyValues()));
 		for (PropertyValue pv : propertyValues) {
+			//准备一个一个的设置属性信息
 			try {
 				// This method may throw any BeansException, which won't be caught
 				// here, if there is a critical failure such as no matching field.
 				// We can attempt to deal only with less serious exceptions.
+				//单个属性的设置方法
 				setPropertyValue(pv);
 			}
 			catch (NotWritablePropertyException ex) {

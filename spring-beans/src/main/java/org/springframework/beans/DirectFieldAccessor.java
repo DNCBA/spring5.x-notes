@@ -137,10 +137,14 @@ public class DirectFieldAccessor extends AbstractNestablePropertyAccessor {
 			}
 		}
 
+		/**
+		 * 通过反射设置属性信息
+		 */
 		@Override
 		public void setValue(@Nullable Object value) throws Exception {
 			try {
 				ReflectionUtils.makeAccessible(this.field);
+				//反射设置属性信息
 				this.field.set(getWrappedInstance(), value);
 			}
 			catch (IllegalAccessException ex) {
